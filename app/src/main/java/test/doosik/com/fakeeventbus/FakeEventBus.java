@@ -37,17 +37,31 @@ public class FakeEventBus {
 
     public synchronized void post(EventData eventData) {
         for(Activity activity : arrayList) {
-            try {
-                Method method = activity.getClass().getDeclaredMethod(MainActivity.EVENT_RECEIVE_METHOD_NAME, EventData.class);
-                method.invoke(activity, eventData);
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+//            try {
+//                Method method = activity.getClass().getDeclaredMethod(MainActivity.EVENT_RECEIVE_METHOD_NAME, EventData.class);
+//                method.invoke(activity, eventData);
+//            } catch (NoSuchMethodException e) {
+//                e.printStackTrace();
+//            } catch (InvocationTargetException e) {
+//                e.printStackTrace();
+//            } catch (IllegalAccessException e) {
+//                e.printStackTrace();
+//            }
+
+            for(Method method : activity.getClass().getDeclaredMethods()) {
+                if(method.getAnnotation(OnEventReceiver.class) != null) {
+                    method.setAccessible(true);
+                    try {
+                        method.invoke(activity, eventData);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }
-
 }
+
+

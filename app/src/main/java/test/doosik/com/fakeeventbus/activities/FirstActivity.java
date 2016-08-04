@@ -13,6 +13,7 @@ import java.util.List;
 import test.doosik.com.fakeeventbus.EventData;
 import test.doosik.com.fakeeventbus.FakeEventBus;
 import test.doosik.com.fakeeventbus.MainActivity;
+import test.doosik.com.fakeeventbus.OnEventReceiver;
 import test.doosik.com.fakeeventbus.R;
 
 /**
@@ -43,7 +44,8 @@ public class FirstActivity extends Activity{
 
     }
 
-    public void onEventReceive(EventData eData) {
+    @OnEventReceiver
+    public void onEvent(EventData eData) {
         List<String> list = eData.getList();
         Log.e(MainActivity.LOGTAG, "[ First Activity ]");
         for(String str : list) {
